@@ -10,8 +10,19 @@ const hstory = require('./models/hestory');
 const app = express();
 app.use(express.json());
 app.use(cors());
+// =========test ===============
+require('dotenv').config();
+
+const dbpass = process.env.DB_PASSWORD;
 
 
+
+
+
+
+
+
+//==================
 // sya hello 
 app.get('/', (req, res) => {
     res.json({
@@ -20,9 +31,9 @@ app.get('/', (req, res) => {
 })
 
 // conacted weth db
-db.connect("mongodb://abdeelmouaiz09:wXRyjOUEJXISlNvj@ac-h22hkuh-shard-00-00.1yaidwn.mongodb.net:27017,ac-h22hkuh-shard-00-01.1yaidwn.mongodb.net:27017,ac-h22hkuh-shard-00-02.1yaidwn.mongodb.net:27017/?replicaSet=atlas-pgakuq-shard-0&ssl=true&authSource=admin&retryWrites=true&w=majority&appName=Cluster01")
+db.connect(dbpass)
     .then(() => {
-        console.log("conacted  wth db  ");
+        console.log("conacted scc wth db  ");
 
     }).catch((err) => console.log("eroo with db " + err))
 
@@ -33,7 +44,7 @@ db.connect("mongodb://abdeelmouaiz09:wXRyjOUEJXISlNvj@ac-h22hkuh-shard-00-00.1ya
 app.post('/book', (req, res) => {
     const newbook = new book();
 
-    console.log(req.body);
+  
 
 
     // info 
@@ -68,7 +79,7 @@ app.get('/book/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const DATA = await book.findById(id);
-        console.log(DATA);
+       
         res.json(DATA)
     } catch (error) {
         console.log(error + "get book erro ");
@@ -81,7 +92,7 @@ app.delete('/delet/:id', async (req, res) => {
 
     try {
         const id = req.params.id
-        console.log(id);
+      
         const dtaa = await book.findByIdAndDelete(id)
         res.send(dtaa)
         return;
