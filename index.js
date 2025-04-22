@@ -15,7 +15,7 @@ app.use(cors());
 // sya hello 
 app.get('/', (req, res) => {
     res.json({
-        "algerai":"mouaiz"
+        "algerai": "mouaiz"
     })
 })
 
@@ -78,22 +78,31 @@ app.get('/book/:id', async (req, res) => {
 
 //================================= delet onex book ===================================================
 app.delete('/delet/:id', async (req, res) => {
-   
+
     try {
         const id = req.params.id
         console.log(id);
         const dtaa = await book.findByIdAndDelete(id)
         res.send(dtaa)
         return;
-        
-      } catch (error) {
-        console.log(error);
-        
-      }
-      
 
-   
+    } catch (error) {
+        console.log(error);
+
+    }
+
+
+
 })
+
+//============================ping render==========================================
+
+
+setInterval(() => {
+    fetch("https://ping-book-dz.onrender.com/")
+        .then(res => console.log("the  srver work and ;   Ping sent - Status:", res.status))
+        .catch(err => console.error(" Ping failed:", err));
+}, 300000); // 300000ms = 5 minutes    
 
 
 app.listen(3000, () => {
