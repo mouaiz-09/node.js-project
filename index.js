@@ -6,6 +6,7 @@ const cors = require('cors');
 //models
 const book = require('./models/book');
 const hstory = require('./models/hestory');
+const Theme = require('./models/admin');
 
 const app = express();
 app.use(express.json());
@@ -44,7 +45,7 @@ db.connect(dbpass)
 app.post('/book', (req, res) => {
     const newbook = new book();
 
-  
+
 
 
     // info 
@@ -79,7 +80,7 @@ app.get('/book/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const DATA = await book.findById(id);
-       
+
         res.json(DATA)
     } catch (error) {
         console.log(error + "get book erro ");
@@ -92,7 +93,7 @@ app.delete('/delet/:id', async (req, res) => {
 
     try {
         const id = req.params.id
-      
+
         const dtaa = await book.findByIdAndDelete(id)
         res.send(dtaa)
         return;
@@ -114,6 +115,52 @@ setInterval(() => {
         .then(res => console.log("the  srver work and ;   Ping sent - Status:", res.status))
         .catch(err => console.error(" Ping failed:", err));
 }, 300000); // 300000ms = 5 minutes    
+
+
+
+
+
+//============================API DASHBORD ==========================================
+
+// ==== get data ======
+app.get('/apis', async (req, res) => {
+    try {
+        const dat = await Theme.find();
+        res.send(dat);
+        return
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+// ================put================
+// تحديث إعدادات الموقع 
+
+app.put("/api/:id", async (req, res) => {
+    try {
+        const { facebook, instagram, youtube, quora, phone, whatsapp, logo_cover, siteweb } = req.body;
+
+        const updatedTheme = await Theme.findByIdAndUpdate(
+            req.params.id,
+            {
+                sh: { facebook, instagram, youtube, quora, phone, whatsapp, logo_cover, siteweb },
+                theme:''
+            },
+            { new: true } // إرجاع البيانات بعد التحديث
+        );
+        console.log(updatedTheme);
+
+        if (!updatedTheme) {
+            return res.status(404).json({ message: "الإعدادات غير موجودة" });
+        }
+
+        res.json({ message: "تم التحديث بنجاح", updatedTheme });
+    } catch (err) {
+        res.status(500).json({ error: "حدث خطأ أثناء التحديث" });
+        console.log(err);
+
+    }
+});
 
 
 app.listen(3000, () => {
